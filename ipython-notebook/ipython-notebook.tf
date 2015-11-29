@@ -1,5 +1,4 @@
 # Configure the Docker provider
-variable "user" {}
 variable "passwd" {}
 
 provider "docker" {
@@ -8,13 +7,13 @@ provider "docker" {
 }
 
 # Create a container
-resource "docker_container" "rstudio-server" {
-    image = "${docker_image.rstudio-server.latest}"
-    name = "rstudio-server"
-    env  = ["USER=${var.user}", "PASSWORD=${var.passwd}"]
+resource "docker_container" "ipython-notebook" {
+    image = "${docker_image.ipython-notebook.latest}"
+    name = "ipython-notebook"
+    env  = ["PASSWORD=${var.passwd}", "USE_HTTPS=yes"]
     ports = {
-            internal = 8787
-            external = 8787
+            internal = 8888
+            external = 443
             }
     volumes = {
             container_path = "/mnt/uploadfiles"
@@ -22,6 +21,6 @@ resource "docker_container" "rstudio-server" {
             }
 }
 
-resource "docker_image" "rstudio-server" {
-    name = "rocker/rstudio:latest"
+resource "docker_image" "ipython-notebook" {
+    name = "jupyter/datascience-notebook"
 }
